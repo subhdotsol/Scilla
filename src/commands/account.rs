@@ -7,14 +7,14 @@ use {
         prompt::prompt_data,
         ui::{print_error, show_spinner},
     },
-    comfy_table::{presets::UTF8_FULL, Cell, Table},
+    anyhow::bail,
+    comfy_table::{Cell, Table, presets::UTF8_FULL},
     console::style,
     inquire::Select,
     solana_nonce::versions::Versions,
     solana_pubkey::Pubkey,
     solana_rpc_client_api::config::{RpcLargestAccountsConfig, RpcLargestAccountsFilter},
     solana_signature::Signature,
-    std::ops::Div,
 };
 
 /// Commands related to wallet or account management
@@ -211,14 +211,10 @@ async fn fetch_nonce_account(ctx: &ScillaContext, pubkey: &Pubkey) -> anyhow::Re
     let versions = bincode::deserialize::<Versions>(&account.data)
         .map_err(|e| anyhow::anyhow!("Failed to deserialize nonce account data: {}", e))?;
 
-    let data = match versions.state() {
-        solana_nonce::state::State::Initialized(data) => data.clone(),
-        _ => {
-            return Err(anyhow::anyhow!(
-                "This account is not an initialized nonce account"
-            ));
-        }
+    let solana_nonce::state::State::Initialized(data) = versions.state() else {
+        bail!("This account is not an initialized nonce account");
     };
+    let data = data.clone();
 
     let mut table = Table::new();
     table
