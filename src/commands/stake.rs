@@ -234,7 +234,7 @@ async fn process_create_stake_account(
 
     if ctx.pubkey() == &stake_account_keypair.pubkey() {
         (bail!(
-            "Stake Account {} cannout be the same as fee payer account {}",
+            "Stake Account {} cannot be the same as fee payer account {}",
             stake_account_keypair.pubkey(),
             ctx.pubkey(),
         ));
