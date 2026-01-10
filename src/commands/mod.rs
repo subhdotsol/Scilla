@@ -2,8 +2,8 @@ use {
     crate::{
         commands::{
             account::AccountCommand, cluster::ClusterCommand, config::ConfigCommand,
-            stake::StakeCommand, transaction::TransactionCommand, vote::VoteCommand,
-            program::ProgramCommand,
+            program::ProgramCommand, stake::StakeCommand, transaction::TransactionCommand,
+            vote::VoteCommand,
         },
         context::ScillaContext,
     },
@@ -17,10 +17,10 @@ use {
 pub mod account;
 pub mod cluster;
 pub mod config;
+pub mod program;
 pub mod stake;
 pub mod transaction;
 pub mod vote;
-pub mod program;
 
 pub enum CommandFlow<T> {
     Process(T),
